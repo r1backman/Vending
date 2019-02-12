@@ -1,0 +1,54 @@
+go get -u github.com/go-sql-driver/mysql
+go get -u github.com/unrolled/secure
+sudo dnf install mariadb mariadb-server
+sudo systemctl start mariadb.service
+sudo systemctl enable mariadb.service
+sudo mysql_secure_installation
+mysql -p -u root
+CREATE DATABASE vendor;
+CREATE USER 'roger'@'localhost' IDENTIFIED BY 'abcdefgh';
+GRANT ALL ON vendor.* TO 'roger'@'localhost';
+exit
+mysql -p -u roger
+connect vendor;
+CREATE TABLE product (`uid` INT(10) NOT NULL AUTO_INCREMENT, `p_description` VARCHAR(64) NULL DEFAULT NULL, `opr_amt` int, `vendor_amt` int, `client_amt` int, `price` dec(5,2), PRIMARY KEY (`uid`));
+CREATE TABLE money (`uid` INT(10) NOT NULL AUTO_INCREMENT, `r_description` VARCHAR(20) NULL DEFAULT NULL, `opr_amt` int, `vendor_amt` int, `client_amt` int, PRIMARY KEY (`uid`));
+CREATE TABLE message (`uid` INT(10) NOT NULL, `message_text` VARCHAR(150), PRIMARY KEY (`uid`));
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('EXPRESSO BEAN', 100, 20, 0, 23.50);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('BLACK COFFEE BEAN', 100, 20, 0, 24.50);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('WHITE COFFEE BEAN', 100, 20, 0, 22.55);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('CUPPUCCINO BEAN', 100, 20, 0, 25.30);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('HOT CHOCOLATE', 100, 20, 0, 15.55);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('TEA BLACK', 100, 20, 0, 14.50);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('TEA WHITE', 100, 20, 0, 15.20);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('BLACK COFFEE INSTANT', 100, 20, 0, 13.55);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('WHITE COFFEE INSTANT', 100, 20, 0, 14.55);
+INSERT INTO product (p_description, opr_amt, vendor_amt, client_amt, price) VALUES ('CUPPUCCINO INSTANT', 100, 20, 0, 13.75);
+
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R200', 100, 20, 2);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R100', 100, 20, 1);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R50', 100, 20, 2);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R20', 100, 20, 1);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R10', 100, 20, 1);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R1', 100, 20, 4);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R.50', 100, 20, 3);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R.20', 100, 20, 5);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R.10', 100, 20, 2);
+INSERT INTO vendor.money (r_description, opr_amt, vendor_amt, client_amt) VALUES ('R.05', 100, 20, 4);
+
+INSERT INTO message (uid, message_text) VALUES (1, 'OK');
+
+sudo dnf install docker
+sudo systemctl start docker
+sudo systemctl enable docker
+docker run -i -t --net=host --name=vender fedora:29 bash
+exit
+docker start vender -a -i
+dnf -y update
+
+in other terminal
+docker cp vending vender:/
+
+on docker terminal
+cd vending
+./vending_machine
